@@ -6,12 +6,21 @@ const app = express();
 const port = 3000;
 
 const userRoute = require('./routes/users');
-const connectionString = 'mongodb://sossargsyan:313515Oazis@ds139167.mlab.com:39167/projectdb';
+const connectionString = 'mongodb://dbuser:dbpass12@ds139167.mlab.com:39167/projectdb';
 const db = mongojs(connectionString, ['users']);
 
 app.use((req, res, next) => {
-    console.log('aaaaaaaaaaaaaaaaaaaaaaaa');
     req.db = db;
+    // Websites you wish to allow to connect, in this case all websites are allowed with '*'
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    // Request methods you wish to allow
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    // Request headers you wish to allow
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+    // Set to true if you need the website to include cookies in the requests sent
+    // to the API (e.g. in case you use sessions)
+    res.setHeader('Access-Control-Allow-Credentials', true);
+    // Pass to next layer of middleware
     next();
 });
 
