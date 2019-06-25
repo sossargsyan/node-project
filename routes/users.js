@@ -14,11 +14,25 @@ router.get('/users/', (req, res) => {
 });
 
 router.delete('/users/:id', (req, res) => {
-    req.db.users.remove( { _id: mongojs.ObjectId(req.params.id) }, (err, resp) => {
-        if (err) {
-            res.status(500).send(err);
+    req.db.users.remove( { _id: mongojs.ObjectId(req.params.id) }, (error, response) => {
+        if (error) {
+            error.errorMessage = "unable to delete user";
+            res.status(500).send(error);
         } else {
-            res.json(resp);
+            res.successMessage = "user deleted";
+            res.json(response);
+        }
+    });
+});
+
+router.post('/user/', (req, res) => {
+    db.users.save( req.body, (error, response) => {
+        if (error) {
+            error.errorMessage = "unable to add user";
+            res.status(500).send(error);
+        } else {
+            res.successMessage = "user added";
+            res.json(response);
         }
     });
 });
