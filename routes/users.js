@@ -13,7 +13,7 @@ router.get('/users/', (req, res) => {
     });
 });
 
-router.get('/update-user/:id', (req, res) => {
+router.put('/update-user/:id', (req, res) => {
     req.db.users.update(
         {id: mongojs.ObjectId(req.params["id"])},
         {$set: req.body},
