@@ -43,12 +43,15 @@ router.delete('/users/:id', (req, res) => {
 });
 
 router.post('/user/', (req, res) => {
-    db.users.save(req.body, (error, response) => {
+    req.db.users.save(req.body, (error, user) => {
         if (error) {
             error.errorMessage = "unable to add user";
             res.status(500).send(error);
         } else {
-            res.successMessage = "user added";
+            const response = {
+                user: user,
+                successMessage: "user added"
+            }            
             res.json(response);
         }
     });
