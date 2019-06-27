@@ -13,18 +13,33 @@ router.get('/users/', (req, res) => {
     });
 });
 
+router.get('/user/:id', (req, res) => {
+    req.db.users.find({_id: mongojs.ObjectId(req.params["id"])}, function (error, user) {
+        if (error) {
+            res.status(500).send(error);
+        } else {
+            res.json(user[0]);
+        }
+    })
+});
+
 router.put('/update-user/:id', (req, res) => {
-    req.db.users.update(
-        {id: mongojs.ObjectId(req.params["id"])},
-        {$set: req.body},
-        (err, res) => {
+    req.db.users.update(        
+        {_id: mongojs.ObjectId(req.params["id"])},
+        {$set: {
+            name: req.body.name,
+            surname: req.body.surname,
+            email: req.body.email,
+        }},
+        (err, result) => {            
             if (err) {
                 err.errorMessage = 'unable to update user';
                 res.status(500).send(err);
             }
             else {
-                res.successMessage = 'user updated';
-                res.json(res);
+                result.successMessage = 'user updated';
+                result.user = req.body;
+                res.json(result);
             }
         }
     );
